@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd 
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context.xsd">
+
+
+
+    <bean id="securityManager"  class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <property name="realm" ref="shiroDbRealm"/>
+        <property name="cacheManager" ref="cacheManager"/>
+    </bean>
+
+    <bean id="cacheManager" class="org.apache.shiro.cache.MemoryConstrainedCacheManager"></bean>
+    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"></bean>
+
+    <!--shiro-->
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <property name="securityManager" ref="securityManager"/>
+        <!--登录的地址-->
+        <property name="loginUrl" value="/"/>
+        <!--登录后地址-->
+        <property name="successUrl" value="/home"/>
+        <!--给没有权限的用户的地址-->
+        <property name="unauthorizedUrl" value="/403"/>
+        <!--权限配置-->
+        <property name="filterChainDefinitions">
+            <value>
+                /static/** = anon
+                /admin/** = roles[管理员]
+                /notice/new = roles[经理]
+                /customer/del/** = roles[经理]
+                /sales/del/** = roles[经理]
+                /** = authc
+            </value>
+        </property>
+    </bean>
+
+
+</beans>
