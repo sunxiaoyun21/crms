@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.crm.mapper.UserLogMapper">
+    <insert id="save">
+        INSERT INTO t_user_log(logintime, loginip, userid) VALUES(#{logintime},#{loginip},#{userid})
+    </insert>
     <select id="findByParam" resultType="com.crm.pojo.UserLog">
         SELECT * FROM t_user_log
         <where>

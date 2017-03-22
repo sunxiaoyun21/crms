@@ -1,13 +1,16 @@
 package com.crm.service.impl;
 
+import com.crm.mapper.RoleMapper;
 import com.crm.mapper.UserLogMapper;
 import com.crm.mapper.UserMapper;
 import com.crm.pojo.Role;
 import com.crm.pojo.User;
 import com.crm.pojo.UserLog;
+import com.crm.service.UserService;
 import com.crm.shiro.ShiroUtil;
 import com.google.common.collect.Maps;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +24,8 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
     @Autowired
     private UserLogMapper userLogMapper;
+    @Autowired
+    private RoleMapper roleMapper;
 
     @Override
     public User findByUserName(String userName) {
@@ -72,7 +77,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public void saveUser(User user) {
-        user.setEnable("1");
+        user.setEnable(true);
         user.setPassword(DigestUtils.md5Hex(user.getPassword()));
         //TODO 微信注册
 
@@ -143,5 +148,25 @@ public class UserServiceImpl implements UserService {
         Map<String,Object> param = Maps.newHashMap();
         param.put("userId",ShiroUtil.getCurrentUserId());
         return userLogMapper.countByParam(param);
+    }
+
+    /**
+     * 查询用户角色
+     * @param roliId
+     * @return
+     */
+    @Override
+    public Role findRoleByRoleId(Integer roliId) {
+        return roleMapper.findRoleById(roliId) ;
+    }
+
+    @Override
+    public void saveUserLogin(String IP) {
+        UserLog userLog=new UserLog();
+        userLog.setLoginip(IP);
+        userLog.setUserid(ShiroUtil.getCurrentUserId());
+        userLog.setLogintime(DateTime.now().toString("YYYY-MM-dd HH:mm"));
+        userLogMapper.save(userLog);
+
     }
 }

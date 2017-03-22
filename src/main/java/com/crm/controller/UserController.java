@@ -3,6 +3,7 @@ package com.crm.controller;
 
 import com.crm.exception.NotFoundException;
 import com.crm.pojo.User;
+import com.crm.service.UserService;
 import com.crm.shiro.ShiroUtil;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;

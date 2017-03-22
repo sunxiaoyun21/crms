@@ -35,4 +35,9 @@ public interface UserService {
 
     Long findCurrentUserLogCount();
 
+    Role findRoleByRoleId(Integer roliId);
+
+
+    void saveUserLogin(String remoteIp);
+
 }
