@@ -16,6 +16,7 @@ public class User {
     private Timestamp createtime;
     private Boolean enable;
     private Integer roleid;
+    private Role role;
 
 
 

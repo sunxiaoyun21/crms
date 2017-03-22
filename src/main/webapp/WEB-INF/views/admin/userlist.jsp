@@ -192,7 +192,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               {"data":"weixin"},
               {"data":"role.rolename"},
               {"data":function (row) {
-                  if(row.enable == "1"){
+                  if(row.enable == true){
                       return "<span class='label label-success'>正常</span>";
                   }else{
                       return "<span class='label label-danger'>禁用</span>";

@@ -42,7 +42,7 @@ public class HomeController {
         /*shiro方式登录*/
         Subject subject= SecurityUtils.getSubject();
         try{
-            // subject.login(new UsernamePasswordToken(username, DigestUtils.md5Hex(password)));
+           // subject.login(new UsernamePasswordToken(username, DigestUtils.md5Hex(password)));
             subject.login(new UsernamePasswordToken(username,password));
             /*获取登录的IP*/
             userService.saveUserLogin(ServletUtil.getRemoteIp(request));
