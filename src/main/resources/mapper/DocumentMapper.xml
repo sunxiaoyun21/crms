@@ -11,4 +11,7 @@
     <select id="findDocumentByFid" resultType="com.crm.pojo.Document">
         SELECT *FROM t_document WHERE fid=#{fid}
     </select>
+    <select id="findDocumentById" resultType="com.crm.pojo.Document">
+        SELECT * FROM t_document WHERE id=#{id}
+    </select>
 </mapper>

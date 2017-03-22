@@ -1,19 +1,23 @@
 package com.crm.controller;
 
 import com.crm.dto.AjaxResult;
+import com.crm.exception.NotFoundException;
 import com.crm.exception.ServiceException;
 import com.crm.pojo.Document;
 import com.crm.service.DocumentService;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
 
 /**
@@ -46,7 +50,14 @@ public class DocumentController {
         return "redirect:/doc?fid="+fid;
     }
 
+    /**
+     * 上传文件
+     * @param fid
+     * @param file
+     * @return
+     */
     @PostMapping("/file/upload")
+    @ResponseBody
     public AjaxResult uploadDocument(Integer fid, MultipartFile file){
        documentService.saveFile(fid,file);
        try {
@@ -54,7 +65,31 @@ public class DocumentController {
        }catch (ServiceException ex){
            return new AjaxResult(AjaxResult.ERROR,ex.getMessage());
        }
+    }
 
-
+    /**
+     * 文件下载
+     * @param id
+     * @param response
+     * @throws IOException
+     */
+    @GetMapping("/download/{id:\\d+}")
+    public void downLoadFile(@PathVariable Integer id, HttpServletResponse response) throws IOException{
+        InputStream inputStream=documentService.downLoadFile(id);
+        if(inputStream==null){
+            throw new NotFoundException();
+        }else {
+            Document document=documentService.findDocumentById(id);
+            OutputStream outputStream=response.getOutputStream();
+            //将文件下载标记为二进制
+            response.setContentType(MediaType.APPLICATION_OCTET_STREAM.toString());
+            String fileName=document.getName();
+            fileName=new String(fileName.getBytes("UTF-8"),"ISO8859-1");
+            response.setHeader("Content-Disposition","attachment;filename=\""+fileName+"\"");
+            IOUtils.copy(inputStream,outputStream);
+            outputStream.flush();
+            outputStream.close();
+            inputStream.close();
+        }
     }
 }

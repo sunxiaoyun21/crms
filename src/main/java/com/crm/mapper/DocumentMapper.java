@@ -14,4 +14,5 @@ public interface DocumentMapper {
 
     void save(Document document);
 
+    Document findDocumentById(Integer id);
 }

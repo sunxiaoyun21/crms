@@ -3,6 +3,8 @@ package com.crm.service;
 import com.crm.pojo.Document;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -17,4 +19,7 @@ public interface DocumentService {
 
     void saveFile(Integer fid, MultipartFile file);
 
+    InputStream downLoadFile(Integer id) throws FileNotFoundException;
+
+    Document findDocumentById(Integer id);
 }

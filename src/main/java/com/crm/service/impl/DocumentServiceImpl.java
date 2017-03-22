@@ -84,5 +84,27 @@ public class DocumentServiceImpl implements DocumentService {
         documentMapper.save(document);
     }
 
+    /**
+     * 下载文件
+     * @param id
+     * @return
+     */
+    @Override
+    public InputStream downLoadFile(Integer id) throws FileNotFoundException {
+        Document document=documentMapper.findDocumentById(id);
+        if(document == null || Document.TYPE_DIR==document.getType()){
+            return null;
+        }else {
+            File file=new File(savePath+"/"+document.getFilename());
+            return new FileInputStream(file);
+        }
+
+    }
+
+    @Override
+    public Document findDocumentById(Integer id) {
+        return documentMapper.findDocumentById(id);
+    }
+
 
 }
