@@ -1,10 +1,14 @@
 package com.crm.mapper;
 
+
 import com.crm.pojo.UserLog;
 
-/**
- * Created by Administrator on 2017/3/19.
- */
+import java.util.List;
+import java.util.Map;
+
 public interface UserLogMapper {
-    void save(UserLog userLog);
+
+    List<UserLog> findByParam(Map<String, Object> param);
+
+    Long countByParam(Map<String, Object> param);
 }

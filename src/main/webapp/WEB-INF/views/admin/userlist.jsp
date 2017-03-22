@@ -150,8 +150,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <div class="form-group">
                         <label>状态</label>
                         <select class="form-control" name="enable" id="edit_user_enable">
-                            <option value="true">正常</option>
-                            <option value="false">禁用</option>
+                            <option value="1">正常</option>
+                            <option value="0">禁用</option>
                         </select>
                     </div>
                 </form>
@@ -192,7 +192,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               {"data":"weixin"},
               {"data":"role.rolename"},
               {"data":function (row) {
-                  if(row.enable){
+                  if(row.enable == "1"){
                       return "<span class='label label-success'>正常</span>";
                   }else{
                       return "<span class='label label-danger'>禁用</span>";
@@ -231,6 +231,142 @@ scratch. This page gets rid of all links and provides the needed markup only.
       });
 
        //新增用户
+       $("#newForm").validate({
+           errorClass:"text-danger",
+           errorElement:"span",
+           rules:{
+               username:{
+                   required:true,
+                   rangelength:[3,20],
+                   remote:"/admin/user/checkusername"
+               },
+               realname:{
+                   required:true,
+                   rangelength:[2,20]
+               },
+               password:{
+                   required:true,
+                   rangelength:[6,18]
+               },
+               weixin:{
+                   required:true
+               }
+           },
+           messages:{
+               username:{
+                   required:"请输入用户名",
+                   rangelength:"用户名的长度3~20位",
+                   remote:"该用户名已被占用"
+               },
+               realname:{
+                   required:"请输入真实姓名",
+                   rangelength:"真实姓名长度2~20位"
+               },
+               password:{
+                   required:"请输入密码",
+                   rangelength:"密码长度6~18位"
+               },
+               weixin:{
+                   required:"请输入微信号码"
+               }
+           },
+           submitHandler:function(form){
+               $.post("/admin/user/new",$(form).serialize()).done(function(data){
+                   if(data == "success") {
+                       $("#newModal").modal('hide');
+                       dataTable.ajax.reload();
+                   }
+               }).error(function(){
+                   alert("服务器异常");
+               });
+           }
+       });
+
+       $("#newBtn").click(function(){
+           $("#newForm")[0].reset();
+           $("#newModal").modal({
+               show:true,
+               backdrop:'static',
+               keyboard:false
+           });
+       });
+       $("#saveBtn").click(function(){
+           $("#newForm").submit();
+       });
+       //重置密码
+       $(document).delegate(".resetPwd","click",function(){
+           var id = $(this).attr("rel");
+           if(alert("确认将密码重置为：000000？")) {
+               $.post("/admin/users/resetpassword",{"id":id}).done(function(data){
+                   if(data == 'success') {
+                       alert("密码重置成功");
+                   }
+               }).error(function(){
+                   alert("服务器异常");
+               });
+           }
+       })
+
+
+       $("#editForm").validate({
+           errorClass:"text-danger",
+           errorElement:"span",
+           rules:{
+               realname:{
+                   required:true,
+                   rangelength:[2,20]
+               },
+               weixin:{
+                   required:true
+               }
+           },
+           messages:{
+               realname:{
+                   required:"请输入真实姓名",
+                   rangelength:"真实姓名长度2~20位"
+               },
+               weixin:{
+                   required:"请输入微信号码"
+               }
+           },
+           submitHandler:function(form){
+               $.post("/admin/users/edit",$(form).serialize()).done(function(data){
+                   if(data == 'success') {
+                       $("#editModal").modal('hide');
+                       dataTable.ajax.reload();
+                   }
+               }).error(function(){
+                   alert("服务器异常");
+               });
+           }
+       });
+       $(document).delegate(".edit","click",function(){
+           var id = $(this).attr("rel");
+           $.get("/admin/users/"+id+".json").done(function(result){
+               if(result.state == "success") {
+                   $("#edit_user_id").val(result.data.id);
+                   $("#edit_user_username").val(result.data.username);
+                   $("#edit_user_realname").val(result.data.realname);
+                   $("#edit_user_weixin").val(result.data.weixin);
+                   $("#edit_user_roleid").val(result.data.roleid);
+                   $("#edit_user_enable").val(result.data.enable);
+
+                   $("#editModal").modal({
+                       show:true,
+                       dropback:'static',
+                       keyboard:false
+                   });
+               } else {
+                   alert(result.message);
+               }
+           }).error(function(){
+               alert("服务器异常");
+           });
+       });
+
+       $("#editBtn").click(function(){
+           $("#editForm").submit();
+       });
 
 
    });

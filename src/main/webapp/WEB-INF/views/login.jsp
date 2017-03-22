@@ -38,6 +38,7 @@
                     </div>
                 </c:otherwise>
             </c:choose>
+
         </c:if>
 
         <form action="/" method="post">
