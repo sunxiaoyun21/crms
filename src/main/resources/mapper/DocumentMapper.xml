@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.crm.mapper.DocumentMapper">
+    <insert id="save">
+        INSERT INTO t_document(name, size,createuser, type, filename, md5, fid, contexttype)
+         VALUES(#{name},#{size},#{createuser},#{type},#{filename},#{md5},#{fid},#{contexttype})
+    </insert>
+    <select id="findAll" resultType="com.crm.pojo.Document">
+        select * FROM t_document;
+    </select>
+    <select id="findDocumentByFid" resultType="com.crm.pojo.Document">
+        SELECT *FROM t_document WHERE fid=#{fid}
+    </select>
+</mapper>

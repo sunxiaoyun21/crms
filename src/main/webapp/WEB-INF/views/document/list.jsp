@@ -117,6 +117,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <!-- AdminLTE App -->
 <script src="/static/dist/js/app.min.js"></script>
 <script src="/static/plugins/webuploader/webuploader.min.js"></script>
+<script src="/static/plugins/layer/layer.js"></script>
 <script>
     $(function(){
 
@@ -132,29 +133,38 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
         //上传文件成功
         uploader.on("startUpload",function(){
-
+            $("#uploadBtn .text").html('<i class="fa fa-spinner fa-spin"></i> 上传中...');
         });
         uploader.on( 'uploadSuccess', function( file,data ) {
-
+            if(data.status=='success'){
+                window.history.go(0);
+            }else {
+                layer.msg(data.message)
+            }
         });
-
         uploader.on( 'uploadError', function( file ) {
-
+            layer.msg("文件上传失败")
         });
 
-        uploader.on( 'uploadComplete', function( file ) {
 
-        });
 
 
 
         //新建文件夹
         $("#newDir").click(function(){
-
+            $("#dirModal").modal({
+                show:true,
+                backdrop:'static',
+                keyboard:false
+            });
         });
 
         $("#saveDirBtn").click(function(){
-
+            if(!$("#dirname").val()) {
+                $("#dirname").focus();
+                return;
+            }
+            $("#saveDirForm").submit();
 
         });
 
