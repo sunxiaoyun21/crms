@@ -3,8 +3,10 @@ package com.crm.controller;
 import com.crm.dto.DataTablesResult;
 import com.crm.exception.NotFoundException;
 import com.crm.pojo.Notice;
+import com.crm.pojo.Reader;
 import com.crm.service.NoticeService;
 import com.crm.service.UserService;
+import com.crm.shiro.ShiroUtil;
 import com.google.common.collect.Maps;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -79,9 +81,20 @@ public class NoticeController {
         if (notice == null) {
             throw new NotFoundException();
         }
+        String username = ShiroUtil.getCurrentRealName();
+        List<String> nameList = noticeService.findReader();
+
+        if(!nameList.contains(username)){
+            noticeService.saveReadMan(username);
+        }
+        List<Reader> readerList = noticeService.findReadMan();
+        model.addAttribute("readerList",readerList);
+        System.out.println(readerList);
         model.addAttribute("notice", notice);
         return "notice/view";
     }
+
+
 
     /**
      * 编辑器上传文件

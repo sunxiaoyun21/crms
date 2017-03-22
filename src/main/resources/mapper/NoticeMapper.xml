@@ -5,6 +5,9 @@
          INSERT into t_notice(title, context,  userid, realname)
          VALUES (#{title},#{context},#{userid},#{realname})
     </insert>
+    <insert id="saveReadMan">
+        INSERT INTO t_reader(username) VALUES (#{username})
+    </insert>
 
     <select id="findByid" resultType="com.crm.pojo.Notice">
         SELECT * FROM t_notice WHERE  id = #{id}
@@ -16,4 +19,11 @@
     <select id="count" resultType="java.lang.Long">
         SELECT count(*) FROM t_notice
     </select>
+    <select id="findReaderMan" resultType="com.crm.pojo.Reader">
+        select * from t_reader
+    </select>
+    <select id="findReader" resultType="java.lang.String">
+         select username from t_reader
+    </select>
+
 </mapper>

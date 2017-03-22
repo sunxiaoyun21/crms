@@ -20,6 +20,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link rel="stylesheet" href="/static/dist/css/AdminLTE.min.css">
     <link rel="stylesheet" href="/static/dist/css/skins/skin-blue.min.css">
     <link rel="stylesheet" href="/static/plugins/datatables/css/dataTables.bootstrap.min.css">
+    <link rel="stylesheet" href="/static/bootstrap/js/sweetalert.css"/>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
@@ -178,6 +179,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script src="/static/plugins/datatables/js/dataTables.bootstrap.min.js"></script>
 <script src="/static/plugins/moment/moment.min.js"></script>
 <script src="/static/plugins/validate/jquery.validate.min.js"></script>
+<script src="/static/bootstrap/js/sweetalert.min.js"></script>
 <script>
    $(function () {
       var dataTable = $("#userTable").DataTable({
@@ -296,14 +298,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
        //重置密码
        $(document).delegate(".resetPwd","click",function(){
            var id = $(this).attr("rel");
-           if(alert("确认将密码重置为：000000？")) {
-               $.post("/admin/users/resetpassword",{"id":id}).done(function(data){
-                   if(data == 'success') {
-                       alert("密码重置成功");
-                   }
-               }).error(function(){
-                   alert("服务器异常");
-               });
+           if(swal({title:"确认将密码重置为：000000？"},function(){
+                       $.post("/admin/users/resetpassword",{"id":id}).done(function(data){
+                           if(data == 'success') {
+                               swal("密码重置成功");
+                           }
+                       }).error(function(){
+                           swal("服务器异常");
+                       });
+                   })) {
+
            }
        })
 
