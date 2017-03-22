@@ -2,6 +2,7 @@ package com.crm.service;
 
 
 import com.crm.pojo.Notice;
+import com.crm.pojo.Reader;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -19,4 +20,12 @@ public interface NoticeService {
     String saveImage(InputStream inputStream, String originalFilename) throws FileNotFoundException, IOException;
 
     void saveNotice(Notice notice);
+
+
+    void saveReadMan(String username);
+
+    List<Reader> findReadMan();
+
+    List<String> findReader();
+
 }

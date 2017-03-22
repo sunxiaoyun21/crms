@@ -1,7 +1,8 @@
 package com.crm.service.impl;
 
 import com.crm.mapper.NoticeMapper;
-import com.crm.pojo.Notice;
+import com.crm.pojo.*;
+import com.crm.pojo.Reader;
 import com.crm.service.NoticeService;
 import com.crm.shiro.ShiroUtil;
 import org.apache.commons.io.IOUtils;
@@ -76,4 +77,20 @@ public class NoticeServiceImpl implements NoticeService {
         notice.setRealname(ShiroUtil.getCurrentRealName());
         noticeMapper.save(notice);
     }
+
+    @Override
+    public void saveReadMan(String username) {
+        noticeMapper.saveReadMan(username);
+    }
+
+    @Override
+    public List<com.crm.pojo.Reader> findReadMan() {
+        return noticeMapper.findReaderMan();
+    }
+
+    @Override
+    public List<String> findReader() {
+        return noticeMapper.findReader();
+    }
+
 }

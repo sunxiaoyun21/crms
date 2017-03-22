@@ -44,7 +44,7 @@ public class HomeController {
         try{
 
             subject.login(new UsernamePasswordToken(username, DigestUtils.md5Hex(password)));
-            
+
 
             /*获取登录的IP*/
             userService.saveUserLogin(ServletUtil.getRemoteIp(request));
